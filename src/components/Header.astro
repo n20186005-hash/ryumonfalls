@@ -1,0 +1,34 @@
+---
+import { siteNavigation } from "@/data/place";
+---
+<header class="site-header" data-header>
+  <a class="brand" href="/" aria-label="龍門の滝 ホーム">
+    <img src="/logo.svg" alt="" width="44" height="44" />
+    <span>
+      <strong>龍門の滝</strong>
+      <small>那須烏山 水辺案内</small>
+    </span>
+  </a>
+  <nav class="desktop-nav" aria-label="主要ナビゲーション">
+    {siteNavigation.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+  <button class="menu-button" type="button" aria-controls="mobile-nav" aria-expanded="false" data-menu-button>
+    <span></span><span></span><span></span>
+    <span class="sr-only">メニューを開く</span>
+  </button>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="モバイルナビゲーション" data-mobile-nav hidden>
+    {siteNavigation.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>("[data-menu-button]");
+  const nav = document.querySelector<HTMLElement>("[data-mobile-nav]");
+
+  button?.addEventListener("click", () => {
+    if (!nav) return;
+    const expanded = button.getAttribute("aria-expanded") === "true";
+    button.setAttribute("aria-expanded", String(!expanded));
+    nav.hidden = expanded;
+  });
+</script>

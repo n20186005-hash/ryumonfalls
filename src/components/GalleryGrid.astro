@@ -1,0 +1,29 @@
+---
+import { images } from "@/data/place";
+interface Props {
+  limit?: number;
+}
+const { limit } = Astro.props;
+const items = typeof limit === "number" ? images.slice(0, limit) : images;
+---
+<div class="gallery-grid" data-gallery>
+  {items.map((image, index) => (
+    <figure class:list={["gallery-card", index === 0 && "gallery-card-large"]}>
+      <button type="button" data-gallery-trigger data-src={image.src} data-title={image.title} data-caption={image.caption} aria-label={`${image.title}を拡大表示`}>
+        <img src={image.thumb} alt={image.alt} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
+      </button>
+      <figcaption>
+        <strong>{image.title}</strong>
+        <span>{image.caption}</span>
+      </figcaption>
+    </figure>
+  ))}
+</div>
+<div class="lightbox" data-lightbox hidden>
+  <button type="button" class="lightbox-close" data-lightbox-close aria-label="閉じる">×</button>
+  <img src="" alt="" data-lightbox-image />
+  <div class="lightbox-caption">
+    <strong data-lightbox-title></strong>
+    <p data-lightbox-text></p>
+  </div>
+</div>

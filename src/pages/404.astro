@@ -1,0 +1,15 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+const title = "ページが見つかりません｜龍門の滝ガイド";
+const description = "お探しのページは見つかりませんでした。龍門の滝ガイドのトップページへ戻れます。";
+---
+<BaseLayout title={title} description={description} path="/404/">
+  <section class="page-title">
+    <div class="page-title-inner">
+      <p class="eyebrow">404</p>
+      <h1>道に迷いました</h1>
+      <p>滝の音が聞こえる方へ、トップページからもう一度ご案内します。</p>
+      <a class="btn btn-primary" href="/">トップへ戻る</a>
+    </div>
+  </section>
+</BaseLayout>

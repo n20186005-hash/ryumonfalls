@@ -1,0 +1,112 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import MapEmbed from "@/components/MapEmbed.astro";
+import { accessSteps, foodSpots, nearbyAttractions, place } from "@/data/place";
+import { placeJsonLd } from "@/lib/seo";
+
+const title = "交通・駐車場｜龍門の滝ガイド";
+const description = "龍門の滝へのJR烏山線滝駅からの徒歩アクセス、車での行き方、無料駐車場、周辺グルメと周辺スポットをまとめました。";
+---
+<BaseLayout title={title} description={description} path="/access/" schema={placeJsonLd(Astro.site)}>
+  <section class="page-title">
+    <div class="page-title-inner">
+      <p class="eyebrow">交通</p>
+      <h1>交通・駐車場</h1>
+      <p>滝駅から徒歩約5分。車の場合は無料駐車場を起点に、民芸館と滝を合わせて回れます。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-panel">
+      <div>
+        <SectionHeading eyebrow="道順" title="詳細交通" text="公共交通・車のどちらでも訪れやすい立地です。帰路の時刻や天候を先に確認しておくと安心です。" />
+        <div class="access-list">
+          {accessSteps.map((item) => (
+            <article class="access-step">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <div class="panel">
+        <h3>基本メモ</h3>
+        <dl>
+          <div>
+            <dt>住所</dt>
+            <dd>{place.address}</dd>
+          </div>
+          <div>
+            <dt>電車</dt>
+            <dd>{place.station}</dd>
+          </div>
+          <div>
+            <dt>車</dt>
+            <dd>{place.car交通}</dd>
+          </div>
+          <div>
+            <dt>駐車場</dt>
+            <dd>{place.parking}</dd>
+          </div>
+          <div>
+            <dt>施設利用</dt>
+            <dd>{place.facilityHours}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="地図" title="Google マップ" text="地図の表示言語は日本語・日本地域に合わせています。" />
+      <MapEmbed />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-panel">
+      <div class="panel">
+        <h3>料金</h3>
+        <p>滝の見学は無料です。隣接する龍門ふるさと民芸館も無料入館の案内があります。</p>
+        <p class="note">有料体験・飲食・企画展示などは、訪問時の案内を確認してください。</p>
+      </div>
+      <div class="panel">
+        <h3>駐車場</h3>
+        <p>観光駐車場は普通車約50台・無料の案内があります。民芸館側にも普通車用の駐車スペースがあり、混雑時は現地案内に従ってください。</p>
+        <p class="note">雨天後や冬季は歩道が滑りやすくなるため、車を降りた後も足元に注意が必要です。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="食事" title="周辺グルメ" text="滝見学と合わせやすい食事・休憩の候補です。営業時間・定休日は変わることがあります。" />
+      <div class="list-grid">
+        {foodSpots.map((spot) => (
+          <article class="list-card">
+            <span>{spot.type} / {spot.distance}</span>
+            <h3>{spot.name}</h3>
+            <p>{spot.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="周辺" title="周辺スポット" text="徒歩圏と車で数分圏の候補を中心に、半日旅に組み込みやすい場所をまとめました。" />
+      <div class="list-grid">
+        {nearbyAttractions.map((spot) => (
+          <article class="list-card">
+            <span>{spot.distance}</span>
+            <h3>{spot.name}</h3>
+            <p>{spot.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

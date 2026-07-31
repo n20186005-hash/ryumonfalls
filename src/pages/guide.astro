@@ -1,0 +1,82 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import { highlights, images, place, seasons } from "@/data/place";
+import { placeJsonLd } from "@/lib/seo";
+
+const title = "見どころ｜龍門の滝ガイド";
+const description = "龍門の滝の滝壺、男釜・女釜、大蛇伝説、JR烏山線との撮影ポイント、季節ごとの楽しみ方を紹介します。";
+---
+<BaseLayout title={title} description={description} path="/guide/" schema={placeJsonLd(Astro.site)}>
+  <section class="page-title">
+    <div class="page-title-inner">
+      <p class="eyebrow">見どころ</p>
+      <h1>見どころ</h1>
+      <p>{place.description}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container story-grid">
+      <div class="story-card">
+        <SectionHeading eyebrow="滝を見る" title="水の幅を、正面から味わう。" text="龍門の滝は高さだけでなく幅の広さが印象的。岩肌を幾筋にも分かれて落ちる水流を、少し離れて全体で眺めるのがおすすめです。" />
+        <p>雨の後や水量の多い時期は迫力が増し、飛沫を感じることもあります。滝壺近くへ向かう時は、濡れた石・階段・川沿いの足元に注意してください。</p>
+      </div>
+      <img src={images[0].src} alt={images[0].alt} loading="eager" style="border-radius: 2rem; box-shadow: var(--shadow); aspect-ratio: 4 / 3; object-fit: cover; width: 100%;" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="四つの視点" title="滝を深く見るための4つの切り口" />
+      <div class="feature-grid">
+        {highlights.map((item) => (
+          <article class="feature-card">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container story-grid">
+      <img src={images[6].src} alt={images[6].alt} loading="lazy" style="border-radius: 2rem; box-shadow: var(--shadow); aspect-ratio: 4 / 3; object-fit: cover; width: 100%;" />
+      <div class="story-card">
+        <SectionHeading eyebrow="列車と滝" title="列車が通る数秒を待つ。" text="滝の上をJR烏山線が通る構図は、全国的にも珍しい滝風景として紹介されています。" />
+        <p>撮影は安全第一。鉄道敷地や私有地には入らず、歩行者の妨げにならない場所から狙います。列車本数は限られるため、駅や公式時刻表で確認してから待つと無駄がありません。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="季節" title="季節ごとの表情" text="同じ滝でも、木々・空・水量・気温で写真の印象は大きく変わります。" />
+      <div class="season-strip">
+        {seasons.map((item) => (
+          <article class="season-item">
+            <strong>{item.season}</strong>
+            <p>{item.theme}</p>
+            <p>{item.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container story-grid">
+      <div class="story-card">
+        <SectionHeading eyebrow="散策案" title="おすすめ散策プラン" />
+        <p><strong>30〜45分：</strong>駐車場または滝駅から滝へ直行し、正面・横・水辺の3つの角度で眺めます。</p>
+        <p><strong>60〜90分：</strong>龍門ふるさと民芸館、龍門カフェ、太平寺を合わせて、民話と町の空気までゆっくり楽しみます。</p>
+        <p><strong>写真目的：</strong>列車時刻を軸に、先に構図を決めてから待つと落ち着いて撮れます。</p>
+      </div>
+      <div class="image-stack" aria-label="季節の龍門の滝">
+        <img src={images[1].src} alt={images[1].alt} loading="lazy" />
+        <img src={images[5].src} alt={images[5].alt} loading="lazy" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,46 @@
+---
+import { siteNavigation } from "@/data/place";
+
+const exploreNavigation = siteNavigation.slice(0, 3);
+const toolNavigation = siteNavigation.slice(3);
+const currentYear = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="footer-shell">
+    <div class="footer-main">
+      <div class="footer-intro">
+        <a class="footer-brand" href="/" aria-label="龍門の滝 ホーム">
+          <img src="/logo.svg" alt="" width="54" height="54" />
+          <span>
+            <strong>龍門の滝</strong>
+            <small>RYUMON FALLS · NASUKARASUYAMA</small>
+          </span>
+        </a>
+        <p>水音、民話、列車の風景が重なる場所へ。四季の見どころと旅の準備を、静かにまとめた水辺案内です。</p>
+        <span class="footer-location">栃木県那須烏山市</span>
+      </div>
+
+      <nav class="footer-column" aria-label="見どころナビゲーション">
+        <h2>見つける</h2>
+        <ul class="footer-links">
+          {exploreNavigation.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <nav class="footer-column" aria-label="旅のツールナビゲーション">
+        <h2>旅のツール</h2>
+        <ul class="footer-links">
+          {toolNavigation.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+          <li><a href="/">トップページ</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-meta">
+        <span>© {currentYear} 龍門の滝</span>
+        <a href="#page-top">ページ上部へ <span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+  </div>
+</footer>

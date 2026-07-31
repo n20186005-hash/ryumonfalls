@@ -1,0 +1,76 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import { place } from "@/data/place";
+import { placeJsonLd } from "@/lib/seo";
+import memorialScriptUrl from "../scripts/memorial-card.ts?url";
+
+const title = "旅の記念カード｜龍門の滝ガイド";
+const description = "龍門の滝の写真や自分の写真を使い、ブラウザ内Canvasだけで1:1・縦長ポストカード・9:16の記念カードを作成できます。";
+---
+<BaseLayout title={title} description={description} path="/memorial-card/" schema={placeJsonLd(Astro.site)}>
+  <section class="page-title">
+    <div class="page-title-inner">
+      <p class="eyebrow">端末内で作成</p>
+      <h1>旅の記念カード</h1>
+      <p>写真を選び、サイズと和風スタイルを決めて、旅の一枚をその場で作成。写真・文字・完成画像はすべて端末内で処理されます。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="作成" title="写真は端末内だけで処理されます" text="スマートフォンではカメラ撮影・自撮り・アルバム選択が利用できます。合成はブラウザ内Canvasで行い、サーバーへアップロードしません。" />
+      <div class="card-tool">
+        <form class="card-controls" onsubmit="return false;">
+          <label>
+            アルバムから選ぶ
+            <input id="photo-input" data-photo-input type="file" accept="image/*" />
+          </label>
+          <label>
+            カメラで撮る
+            <input data-photo-input type="file" accept="image/*" capture="environment" />
+          </label>
+          <label>
+            自撮りする
+            <input data-photo-input type="file" accept="image/*" capture="user" />
+          </label>
+          <label>
+            サイズ
+            <select id="ratio-input">
+              <option value="square">1:1 正方形</option>
+              <option value="postcard">縦長ポストカード</option>
+              <option value="story">9:16 ストーリー</option>
+            </select>
+          </label>
+          <label>
+            スタイル
+            <select id="style-input">
+              <option value="moss">深緑和紙</option>
+              <option value="mist">霧の青緑</option>
+              <option value="sakura">夕桜</option>
+            </select>
+          </label>
+          <label>
+            スポット名
+            <input id="title-input" type="text" value={place.name} maxlength="18" />
+          </label>
+          <label>
+            日付
+            <input id="date-input" type="date" />
+          </label>
+          <label>
+            一言
+            <input id="note-input" type="text" value="水音と列車の余韻を持ち帰る" maxlength="28" />
+          </label>
+          <div class="privacy-box">写真、入力した文字、完成画像は現在の端末内だけで処理されます。サーバー送信・保存は行いません。</div>
+          <button id="download-card" type="button" class="btn btn-dark">PNGでダウンロード</button>
+          <button id="reset-photo" type="button" class="btn btn-light">初期写真に戻す</button>
+        </form>
+        <div class="canvas-wrap">
+          <canvas id="memorial-canvas" width="1600" height="1600" aria-label="龍門の滝記念カードプレビュー"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script type="module" src={memorialScriptUrl}></script>
+</BaseLayout>

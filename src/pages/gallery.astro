@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import GalleryGrid from "@/components/GalleryGrid.astro";
+import { images } from "@/data/place";
+import { placeJsonLd } from "@/lib/seo";
+import galleryScriptUrl from "../scripts/gallery.ts?url";
+
+const title = "写真ギャラリー｜龍門の滝ガイド";
+const description = "龍門の滝の春、初夏、紅葉、冬、氷瀑、JR烏山線と滝の写真を大きなギャラリー形式で紹介します。";
+---
+<BaseLayout title={title} description={description} path="/gallery/" image={images[6].src} schema={placeJsonLd(Astro.site)}>
+  <section class="page-title">
+    <div class="page-title-inner">
+      <p class="eyebrow">写真</p>
+      <h1>写真ギャラリー</h1>
+      <p>四季の光、水の表情、滝上を走る列車。龍門の滝の景観を大きなグリッドでまとめました。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="景色" title="大きな写真グリッド" text="画像はローカル配置、レスポンシブ表示、遅延読み込み、クリック拡大に対応しています。" />
+      <GalleryGrid />
+      <p class="note">写真は景観紹介のための現地写真です。転載や二次利用が必要な場合は、必ず権利者・配布元の条件を確認してください。</p>
+    </div>
+  </section>
+  <script type="module" src={galleryScriptUrl}></script>
+</BaseLayout>

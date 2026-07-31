@@ -1,0 +1,179 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import InfoPill from "@/components/InfoPill.astro";
+import GalleryGrid from "@/components/GalleryGrid.astro";
+import MapEmbed from "@/components/MapEmbed.astro";
+import { accessSteps, faqItems, foodSpots, highlights, images, nearbyAttractions, place, seasons } from "@/data/place";
+import { faqJsonLd, placeJsonLd } from "@/lib/seo";
+import galleryScriptUrl from "../scripts/gallery.ts?url";
+
+const title = "龍門の滝｜那須烏山の滝・列車・民話を巡る非公式ガイド";
+const description = "栃木県那須烏山市・龍門の滝の見どころ、交通、駐車場、料金、周辺グルメ、写真スポット、記念カード機能をまとめた日本語ガイド。";
+---
+<BaseLayout title={title} description={description} path="/" schema={[placeJsonLd(Astro.site), faqJsonLd()]}>
+  <section class="hero">
+    <img class="hero-bg" src={images[0].src} alt="龍門の滝の大きな水流" loading="eager" decoding="async" />
+    <div class="hero-content">
+      <span class="kicker">栃木県那須烏山市</span>
+      <h1>龍門の滝<span>水音、民話、列車が交差する場所</span></h1>
+      <p>{place.shortDescription} 幅広の水流、滝上を走るJR烏山線、滝壺に残る大蛇伝説まで、静かな旅の一日を組み立てられます。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/access/">交通と駐車場を見る</a>
+        <a class="btn btn-ghost" href="/memorial-card/">記念カードを作る</a>
+      </div>
+      <div class="hero-meta" aria-label="基本情報">
+        <InfoPill label="滝の規模" value={place.size} />
+        <InfoPill label="料金" value={place.fee} />
+        <InfoPill label="最寄駅" value="滝駅 徒歩約5分" />
+        <InfoPill label="滞在目安" value="30〜90分" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container story-grid">
+      <div class="story-card">
+        <SectionHeading eyebrow="物語" title="滝の向こうに、龍の民話が立ち上がる。" text="龍門の滝は江川にかかる名瀑。豪快な水音と、太平寺に伝わる大蛇の伝説が重なり、ただ眺めるだけでは終わらない奥行きを持っています。" />
+        <p>滝の中段には「男釜」「女釜」と呼ばれる甌穴があり、長い年月をかけて水が岩を削った造形美を感じられます。滝の上をJR烏山線の列車が通るため、列車と滝を一緒に撮れる珍しい景観としても親しまれています。</p>
+        <a class="btn btn-dark" href="/guide/">見どころを詳しく</a>
+      </div>
+      <div class="image-stack" aria-label="龍門の滝の季節写真">
+        <img src={images[2].src} alt={images[2].alt} loading="lazy" />
+        <img src={images[6].src} alt={images[6].alt} loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="見どころ" title="はじめての龍門の滝で見るべき4つ" text="短い滞在でも、滝のスケール・地形・民話・鉄道風景の流れで歩くと印象が残ります。" />
+      <div class="feature-grid">
+        {highlights.map((item) => (
+          <article class="feature-card">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-panel">
+      <div class="panel">
+        <h3>料金・駐車場</h3>
+        <dl>
+          <div>
+            <dt>見学料金</dt>
+            <dd>{place.fee}</dd>
+          </div>
+          <div>
+            <dt>駐車場</dt>
+            <dd>{place.parking}</dd>
+          </div>
+          <div>
+            <dt>施設利用の目安</dt>
+            <dd>{place.facilityHours}</dd>
+          </div>
+          <div>
+            <dt>おすすめ滞在</dt>
+            <dd>{place.recommendedStay}</dd>
+          </div>
+        </dl>
+      </div>
+      <div>
+        <SectionHeading eyebrow="季節" title="おすすめの時期" text={place.bestSeason} />
+        <div class="season-strip">
+          {seasons.map((item) => (
+            <article class="season-item">
+              <strong>{item.season}</strong>
+              <p>{item.theme}</p>
+              <p>{item.note}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-panel transport-panel">
+      <div>
+        <SectionHeading eyebrow="交通" title="詳細交通" text="電車でも車でも訪ねやすい滝です。足元が濡れることがあるため、歩きやすい靴で向かうのがおすすめです。" />
+        <div class="access-list">
+          {accessSteps.map((item) => (
+            <article class="access-step">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <MapEmbed />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="食事" title="周辺グルメ" text="滝見学の前後に寄りやすい候補です。営業日・営業時間は出発前に確認してください。" />
+      <div class="list-grid">
+        {foodSpots.map((spot) => (
+          <article class="list-card">
+            <span>{spot.type} / {spot.distance}</span>
+            <h3>{spot.name}</h3>
+            <p>{spot.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="周辺" title="周辺スポット" text="水音を聞いたあと、民芸館・寺院・町の文化施設へ足を伸ばすと、那須烏山らしい半日旅になります。" />
+      <div class="list-grid">
+        {nearbyAttractions.map((spot) => (
+          <article class="list-card">
+            <span>{spot.distance}</span>
+            <h3>{spot.name}</h3>
+            <p>{spot.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="写真" title="写真ギャラリー" text="四季の龍門の滝を大きなグリッドで。クリックすると拡大表示できます。" />
+      <GalleryGrid limit={5} />
+      <p class="note">写真はサイト内にローカル配置し、表示時は遅延読み込みに対応しています。</p>
+      <a class="btn btn-dark" href="/gallery/">写真をもっと見る</a>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <img src={images[4].src} alt="冬の龍門の滝" loading="lazy" />
+    <div class="cta-band-content">
+      <p class="eyebrow">記念カード</p>
+      <h2>旅の写真を、端末の中だけで記念カードに。</h2>
+      <p>写真を選び、サイズと和のスタイルを選ぶだけ。Canvasで合成し、画像や文字はサーバーへ送信されません。</p>
+      <a class="btn btn-primary" href="/memorial-card/">記念カードを作る</a>
+    </div>
+  </section>
+
+  <section class="section section-narrow">
+    <SectionHeading eyebrow="質問" title="よくある質問" text="はじめて訪れる前に確認したいことをまとめました。" />
+    <div class="faq-list">
+      {faqItems.slice(0, 4).map((item) => (
+        <details class="faq-item">
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+    <a class="btn btn-light" href="/faq/">質問をすべて見る</a>
+  </section>
+  <script type="module" src={galleryScriptUrl}></script>
+</BaseLayout>
