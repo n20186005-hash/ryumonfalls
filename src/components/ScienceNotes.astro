@@ -1,0 +1,12 @@
+---
+import { scienceNotes } from "@/data/visitor";
+---
+
+<div class="feature-grid">
+  {scienceNotes.map((note) => (
+    <article class="feature-card">
+      <h3>{note.title}</h3>
+      <p>{note.text}</p>
+    </article>
+  ))}
+</div>

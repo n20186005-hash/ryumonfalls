@@ -4,11 +4,14 @@ import Footer from "@/components/Footer.astro";
 import { pageUrl, toAbsolute } from "@/lib/seo";
 import "@/styles/global.css";
 
+import { place } from "@/data/place";
+
 interface Props {
   title: string;
   description: string;
   path?: string;
   image?: string;
+  imageAlt?: string;
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
@@ -17,11 +20,14 @@ const {
   description,
   path = Astro.url.pathname,
   image = "/images/ryumon-falls-hero.webp",
+  imageAlt,
   schema
 } = Astro.props;
 
 const canonical = pageUrl(path, Astro.site);
 const ogImage = toAbsolute(image, Astro.site) ?? image;
+const ogImageAlt = imageAlt ?? `${place.name}（${place.englishName}）${place.state}${place.city}の景勝地`;
+const siteName = `${place.name} 観光ガイド`;
 const jsonLd = Array.isArray(schema) ? schema : schema ? [schema] : [];
 const gaId = "G-HXM22WWPKP";
 ---
@@ -38,13 +44,22 @@ const gaId = "G-HXM22WWPKP";
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1f6f67" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="龍門の滝" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     {jsonLd.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
     <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
     <script is:inline define:vars={{ gaId }}>
@@ -52,6 +67,13 @@ const gaId = "G-HXM22WWPKP";
       function gtag(){window.dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', gaId);
+    </script>
+    <script is:inline>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js").catch(function () {});
+        });
+      }
     </script>
   </head>
   <body id="page-top">

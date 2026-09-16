@@ -1,0 +1,15 @@
+---
+import { visitorResponsibilities } from "@/data/visitor";
+---
+
+<ol class="responsibility-list">
+  {visitorResponsibilities.map((item, index) => (
+    <li>
+      <span class="responsibility-index" aria-hidden="true">{index + 1}</span>
+      <div>
+        <h3>{item.title}</h3>
+        <p>{item.text}</p>
+      </div>
+    </li>
+  ))}
+</ol>

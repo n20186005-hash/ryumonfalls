@@ -1,0 +1,48 @@
+---
+import SectionHeading from "@/components/SectionHeading.astro";
+import { googleMapsReviewsUrl, googleMapsShareUrl, officialLinks, place } from "@/data/place";
+
+const ratingSource = {
+  name: "Google マップ（Google Maps）のユーザー評価",
+  url: googleMapsReviewsUrl,
+  note: `評価 4.1 / 口コミ ${place.reviewCountLabel}件 · 同期時間 ${place.ratingSyncedAt}。${place.ratingSourceNote}`
+};
+
+const sources = [ratingSource, ...officialLinks];
+---
+
+<section class="section section-narrow" id="sources">
+  <SectionHeading
+    eyebrow="情報源"
+    title={`${place.name}の情報源と評価の出典`}
+    text="掲載内容の根拠と、評価データの引用元をまとめています。最新情報は各公式サイト・Google マップでご確認ください。"
+  />
+  <div class="source-list">
+    {
+      sources.map((source) => (
+        <article class="source-card">
+          <h3>{source.name}</h3>
+          <p>{source.note}</p>
+          <a class="source-link" href={source.url} target="_blank" rel="noopener noreferrer">
+            <span>{source.name}</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+      ))
+    }
+    <article class="source-card">
+      <h3>所在地・地図</h3>
+      <p>
+        {place.address}（{place.addressEnglish}）／プラスコード {place.plusCode}
+      </p>
+      <a class="source-link" href={googleMapsShareUrl} target="_blank" rel="noopener noreferrer">
+        <span>Google マップで{place.name}の位置を開く</span>
+        <span aria-hidden="true">↗</span>
+      </a>
+    </article>
+  </div>
+  <p class="note">
+    当サイトは{place.state}
+    {place.city}の非公式観光ガイドです。営業時間・料金・運行状況・評価は変動するため、訪問前に公式サイトと Google マップで最新情報をご確認ください。
+  </p>
+</section>

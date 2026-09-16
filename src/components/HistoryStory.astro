@@ -1,0 +1,17 @@
+---
+import { historyChapters } from "@/data/visitor";
+import { place } from "@/data/place";
+---
+
+<ol class="timeline">
+  {historyChapters.map((chapter) => (
+    <li class="timeline-item">
+      <span class="timeline-period">{chapter.period}</span>
+      <h3>{chapter.title}</h3>
+      <p>{chapter.text}</p>
+    </li>
+  ))}
+</ol>
+<p class="service-note">
+  由来・伝承には複数の伝わり方があります。ここでは那須烏山市と地域の案内で広く紹介されている説を中心にまとめ、特定の店舗・団体の宣伝は行っていません。より詳しい記述は{place.nearbyLandmark1}および那須烏山市の関連施設の展示で確認できます。
+</p>

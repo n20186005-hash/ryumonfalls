@@ -1,0 +1,98 @@
+---
+import { place } from "@/data/place";
+import { clothingAdvice, describeCode, getForecast, umbrellaAdvice } from "@/lib/weather";
+import weatherScriptUrl from "../scripts/weather.ts?url";
+
+interface Props {
+  variant?: "default" | "compact";
+  forecastDays?: number;
+  heading?: boolean;
+}
+
+const { variant = "default", forecastDays = variant === "compact" ? 4 : 7, heading = false } = Astro.props;
+
+const forecast = await getForecast(place.latitude, place.longitude, forecastDays);
+const visibleCount = variant === "compact" ? Math.min(4, forecastDays) : forecastDays;
+const shownDays = (forecast?.days ?? []).slice(0, visibleCount);
+const current = forecast?.current ?? null;
+const today = shownDays[0];
+const advice = umbrellaAdvice(today);
+const clothing = clothingAdvice(today?.max ?? null, today?.min ?? null);
+const currentLabel = describeCode(current?.code ?? null);
+
+const formatTemp = (value: number | null): string => (value === null ? "—" : `${Math.round(value)}℃`);
+const formatWind = (value: number | null): string => (value === null ? "—" : `${value.toFixed(1)} m/s`);
+const formatPrecip = (value: number | null): string => (value === null ? "—" : `${value.toFixed(1)} mm`);
+const formatPercent = (value: number | null): string => (value === null ? "—" : `${Math.round(value)}%`);
+
+const updatedText = forecast?.updatedAt
+  ? new Intl.DateTimeFormat("ja-JP", {
+      dateStyle: "long",
+      timeStyle: "short",
+      timeZone: "Asia/Tokyo"
+    }).format(new Date(forecast.updatedAt))
+  : null;
+---
+
+<section class="weather-card" data-weather data-lat={place.latitude} data-lng={place.longitude} data-days={forecastDays}>
+  {heading ? <h3 class="weather-heading">{place.name}付近の現在の天気</h3> : null}
+
+  {
+    forecast ? (
+      <div class="weather-body">
+        <div class="weather-current">
+          {updatedText ? <p class="weather-updated">{updatedText} 時点の観測・予報</p> : null}
+          <div class="weather-now">
+            <span class="weather-symbol" data-field="current-symbol" aria-hidden="true">{currentLabel.symbol}</span>
+            <div>
+              <p class="weather-temp" data-field="current-temp">{formatTemp(current?.temperature ?? null)}</p>
+              <p class="weather-desc" data-field="current-label">{currentLabel.label}</p>
+            </div>
+          </div>
+          <dl class="weather-meta">
+            <div><dt>体感</dt><dd data-field="current-apparent">{formatTemp(current?.apparentTemperature ?? null)}</dd></div>
+            <div><dt>湿度</dt><dd data-field="current-humidity">{formatPercent(current?.humidity ?? null)}</dd></div>
+            <div><dt>風速</dt><dd data-field="current-wind">{formatWind(current?.windSpeed ?? null)}</dd></div>
+            <div><dt>降水量</dt><dd data-field="current-precip">{formatPrecip(current?.precipitation ?? null)}</dd></div>
+          </dl>
+        </div>
+
+        <div class="weather-advice">
+          <p class="weather-advice-lead" data-field="umbrella-level">今日の雨具の目安：{advice.level}</p>
+          <p data-field="umbrella-text">{advice.text}</p>
+          <p data-field="clothing-text">服装の目安：{clothing}</p>
+        </div>
+      </div>
+    ) : (
+      <div class="weather-body">
+        <p class="weather-fallback">
+          現在の天気を取得できませんでした。出発前に<a href="https://www.jma.go.jp/bosai/forecast/" target="_blank" rel="noopener noreferrer">気象庁の最新の天気・注意報<span aria-hidden="true">↗</span></a>と、このページ内の季節別の目安をご確認ください。
+        </p>
+      </div>
+    )
+  }
+
+  {
+    shownDays.length > 0 ? (
+      <ul class="weather-days">
+        {shownDays.map((day, index) => (
+          <li class="weather-day" data-day={index}>
+            <span class="weather-day-name">
+              <strong data-field="label">{index === 0 ? "今日" : index === 1 ? "明日" : day.weekday}</strong>
+              <small data-field="date">{day.date.replace(/^\d{4}-/, "")}</small>
+            </span>
+            <span class="weather-day-symbol" data-field="symbol" aria-hidden="true">{describeCode(day.code).symbol}</span>
+            <span class="weather-day-desc" data-field="desc">{day.label}</span>
+            <span class="weather-day-range" data-field="range">{formatTemp(day.max)} ／ {formatTemp(day.min)}</span>
+            <span class="weather-day-pop" data-field="pop">降水確率 {formatPercent(day.precipitationProbability)}</span>
+          </li>
+        ))}
+      </ul>
+    ) : null
+  }
+
+  <p class="note">
+    気温・降水確率はページを開いた時点の最新の観測・予報にもとづく値です。台風・大雨・大雪の際は、必ず<a href="https://www.jma.go.jp/bosai/map.html" target="_blank" rel="noopener noreferrer">気象庁の防災情報<span aria-hidden="true">↗</span></a>と那須烏山市の案内をご確認ください。
+  </p>
+</section>
+<script type="module" src={weatherScriptUrl}></script>

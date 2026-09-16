@@ -1,0 +1,43 @@
+---
+import { seasonStrategy } from "@/data/visitor";
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const rows = compact ? seasonStrategy.filter((row) => row.score.startsWith("★★★")) : seasonStrategy;
+---
+
+<div class="table-wrap">
+  <table class="data-table season-table">
+    <caption>季節ごとの総合戦略（気候・水量・装備・混雑の傾向）</caption>
+    <thead>
+      <tr>
+        <th scope="col">季節</th>
+        <th scope="col">気温の目安</th>
+        <th scope="col">水・見え方</th>
+        <th scope="col">装備の目安</th>
+        <th scope="col">混雑の傾向</th>
+        <th scope="col">注意点</th>
+        <th scope="col">おすすめ度</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          <th scope="row">{row.season}</th>
+          <td>{row.temp}</td>
+          <td>{row.water}</td>
+          <td>{row.clothing}</td>
+          <td>{row.crowd}</td>
+          <td>{row.caution}</td>
+          <td class="season-score">{row.score}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="service-note">
+  気温は那須烏山市周辺のおおよその傾向にもとづく目安であり、年ごとの実際の天候とは異なります。出発当日は<a href="#weather">このページの現在の天気・予報</a>、および<a href="https://www.jma.go.jp/bosai/forecast/" target="_blank" rel="noopener noreferrer">気象庁の最新情報<span aria-hidden="true">↗</span></a>を併せてご確認ください。
+</p>

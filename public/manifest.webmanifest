@@ -1,15 +1,58 @@
 {
-  "name": "龍門の滝ガイド",
+  "id": "/",
+  "name": "龍門の滝（Ryumon Falls）観光ガイド",
   "short_name": "龍門の滝",
+  "description": "栃木県那須烏山市・龍門の滝の見どころ、所在地、交通・駐車場、季節の写真、よくある質問をまとめた日本語の非公式観光ガイド。",
+  "lang": "ja",
+  "dir": "ltr",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#f7f1df",
   "theme_color": "#1f6f67",
+  "categories": ["travel", "lifestyle"],
   "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
     {
       "src": "/logo.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "交通・駐車場",
+      "short_name": "交通",
+      "url": "/access/"
+    },
+    {
+      "name": "見どころ",
+      "short_name": "見どころ",
+      "url": "/guide/"
+    },
+    {
+      "name": "旅の記念カード",
+      "short_name": "記念カード",
+      "url": "/memorial-card/"
     }
   ]
 }

@@ -1,7 +1,71 @@
+# 依存関係
 node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-install-state.gz
+package-lock.json
+yarn.lock
+
+# ビルド成果物（Cloudflare Workers へは dist の内容のみをアップロードする）
 dist/
+.output/
 .astro/
+.cache/
 .wrangler/
-.DS_Store
+.mf/
+workers/
+_build/
+
+# 環境・シークレット
 .env
 .env.*
+!.env.example
+.dev.vars
+*.pem
+*.key
+
+# ログ
+*.log
+logs/
+install*.log
+.install*.log
+
+# 一時ファイル・ローカル作業用
+.tmp/
+.temp/
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+*.rej
+*.swp
+*~
+
+# エディタ・OS
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+.idea/
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# テスト・カバレッジ
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# 解析・計測
+.lighthouseci/
+.speedlify/
+.benchmarks/

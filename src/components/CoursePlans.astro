@@ -1,0 +1,20 @@
+---
+import { coursePlans } from "@/data/visitor";
+---
+
+<div class="course-grid">
+  {coursePlans.map((plan) => (
+    <article class="course-card">
+      <h3>{plan.title}</h3>
+      <p class="course-lead">{plan.lead}</p>
+      <ol class="course-steps">
+        {plan.steps.map((step) => (
+          <li>
+            <span class="course-time">{step.time}</span>
+            <span class="course-text">{step.text}</span>
+          </li>
+        ))}
+      </ol>
+    </article>
+  ))}
+</div>

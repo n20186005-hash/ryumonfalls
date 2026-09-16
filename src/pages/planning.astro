@@ -1,0 +1,119 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import WeatherForecast from "@/components/WeatherForecast.astro";
+import SeasonStrategy from "@/components/SeasonStrategy.astro";
+import VisitorServices from "@/components/VisitorServices.astro";
+import AudienceRoutes from "@/components/AudienceRoutes.astro";
+import SourcesSection from "@/components/SourcesSection.astro";
+import { images, place } from "@/data/place";
+import { breadcrumbJsonLd, placeJsonLd } from "@/lib/seo";
+
+const breadcrumbItems = [
+  { label: `${place.name} ホーム`, href: "/" },
+  { label: "旅の計画" }
+];
+
+const schema = [placeJsonLd(Astro.site), breadcrumbJsonLd(breadcrumbItems, Astro.site)].filter(
+  (value): value is Record<string, unknown> => Boolean(value)
+);
+
+const title = `旅の計画｜${place.name}（${place.englishName}）の天気・設備・モデルコース`;
+const description = `${place.state}${place.city}・${place.name}を訪れる前に役立つ情報まとめ。現在の天気と数日間の予報、季節ごとの服装と水量の目安、トイレ・駐車場・給油・充電・宿泊などの設備情報、同行者別の回り方を掲載しています。`;
+---
+
+<BaseLayout title={title} description={description} path="/planning/" image={images[6].src} imageAlt={`${place.name}上空を走るJR烏山線と四季の風景`} schema={schema}>
+  <section class="page-title">
+    <div class="page-title-inner">
+      <Breadcrumb tone="light" items={breadcrumbItems} />
+      <p class="eyebrow">旅の計画</p>
+      <h1>{place.name}の旅を計画する</h1>
+      <p>
+        天気の確認から持ち物、移動手段、現地での過ごし方まで。出発前にこのページだけ見れば済むように、
+        {place.state}{place.city}の水辺の実用情報をまとめました。季節の傾向は目安であり、当日の判断は最新の予報と現地の案内を優先してください。
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="weather">
+    <div class="container">
+      <SectionHeading
+        eyebrow="天気"
+        title="現在の天気と数日間の予報"
+        text={`${place.name}周辺の観測値と、傘・服装の目安をまとめています。ページを開くたびに最新の値へ更新されます。`}
+      />
+      <WeatherForecast heading />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="季節戦略"
+        title="いつ訪れるか：季節ごとの気候・水量・混雑の目安"
+        text="気温、水の量と見え方、必要な装備、混み合い方を一覧にしました。初めての方は春・秋の平日午前が動きやすい傾向です。"
+      />
+      <SeasonStrategy />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="設備・サービス"
+        title="現地にある設備と、周辺でそろうもの"
+        text="非営利の中立的な案内として、特定の店舗は紹介せず設備の種類と距離帯のみを掲載しています。"
+      />
+      <VisitorServices />
+    </div>
+  </section>
+
+  <section class="section section-narrow">
+    <SectionHeading
+      eyebrow="同行者別"
+      title="誰と来るかで変える回り方"
+      text="体力・目的・天候に合わせて、同じ滝でも順序と所要を変えるのが安全です。"
+    />
+    <AudienceRoutes />
+  </section>
+
+  <section class="section">
+    <div class="container split-panel">
+      <div class="panel">
+        <h3>このページとあわせて読みたい</h3>
+        <dl>
+          <div>
+            <dt>空港からの詳しい行き方</dt>
+            <dd><a href="/access/">交通・駐車場ページで時間・費用の目安を確認<span aria-hidden="true">→</span></a></dd>
+          </div>
+          <div>
+            <dt>半日・1日のモデルコース</dt>
+            <dd><a href="/#course">トップページのモデルコース<span aria-hidden="true">→</span></a></dd>
+          </div>
+          <div>
+            <dt>見どころと写真スポット</dt>
+            <dd><a href="/guide/">見どころページ<span aria-hidden="true">→</span></a></dd>
+          </div>
+          <div>
+            <dt>秋・冬の写真を確認</dt>
+            <dd><a href="/gallery/">写真ギャラリー<span aria-hidden="true">→</span></a></dd>
+          </div>
+        </dl>
+      </div>
+      <div>
+        <SectionHeading eyebrow="持ち物" title="季節をまたぐ共通の持ち物チェック" />
+        <ul class="audience-tips">
+          <li>滑りにくい靴（濡れた岩・苔・凍結への備えとして最優先）</li>
+          <li>雨具：折りたたみ傘に加え、両手が空く上着タイプも安心</li>
+          <li>飲み物・軽食（近隣店舗の営業時間は限られることがあります）</li>
+          <li>モバイルバッテリーと、オフラインでも読める地図・時刻表</li>
+          <li>現金の少額紙幣・硬貨（小規模施設では現金のみの場合があります）</li>
+          <li>冬季は手袋・帽子・滑り止め、夏季は帽子と虫除け</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <SourcesSection />
+</BaseLayout>

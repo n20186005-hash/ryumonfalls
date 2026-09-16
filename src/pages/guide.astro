@@ -1,17 +1,25 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
 import { highlights, images, place, seasons } from "@/data/place";
 import { placeJsonLd } from "@/lib/seo";
 
-const title = "見どころ｜龍門の滝ガイド";
-const description = "龍門の滝の滝壺、男釜・女釜、大蛇伝説、JR烏山線との撮影ポイント、季節ごとの楽しみ方を紹介します。";
+const title = `見どころ｜${place.name}（${place.englishName}）ガイド｜${place.state}${place.city}`;
+const description = `${place.state}${place.city}の${place.name}（${place.englishName}）の滝壺、男釜・女釜、大蛇伝説、JR烏山線との撮影ポイント、季節ごとの楽しみ方を紹介します。`;
 ---
 <BaseLayout title={title} description={description} path="/guide/" schema={placeJsonLd(Astro.site)}>
   <section class="page-title">
     <div class="page-title-inner">
+      <Breadcrumb
+        tone="light"
+        items={[
+          { label: `${place.name} ホーム`, href: "/" },
+          { label: "見どころ" }
+        ]}
+      />
       <p class="eyebrow">見どころ</p>
-      <h1>見どころ</h1>
+      <h1>{place.name}の見どころ</h1>
       <p>{place.description}</p>
     </div>
   </section>
@@ -70,7 +78,7 @@ const description = "龍門の滝の滝壺、男釜・女釜、大蛇伝説、JR
       <div class="story-card">
         <SectionHeading eyebrow="散策案" title="おすすめ散策プラン" />
         <p><strong>30〜45分：</strong>駐車場または滝駅から滝へ直行し、正面・横・水辺の3つの角度で眺めます。</p>
-        <p><strong>60〜90分：</strong>龍門ふるさと民芸館、龍門カフェ、太平寺を合わせて、民話と町の空気までゆっくり楽しみます。</p>
+        <p><strong>60〜90分：</strong>滝に隣接する展示施設と休憩スペース、近隣の寺社を合わせて、民話と町の空気までゆっくり楽しみます。</p>
         <p><strong>写真目的：</strong>列車時刻を軸に、先に構図を決めてから待つと落ち着いて撮れます。</p>
       </div>
       <div class="image-stack" aria-label="季節の龍門の滝">

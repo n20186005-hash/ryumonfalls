@@ -2,17 +2,29 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
 import MapEmbed from "@/components/MapEmbed.astro";
-import { accessSteps, foodSpots, nearbyAttractions, place } from "@/data/place";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import RatingSummary from "@/components/RatingSummary.astro";
+import SourcesSection from "@/components/SourcesSection.astro";
+import TransportGuide from "@/components/TransportGuide.astro";
+import VisitorServices from "@/components/VisitorServices.astro";
+import { nearbyAttractions, place } from "@/data/place";
 import { placeJsonLd } from "@/lib/seo";
 
-const title = "交通・駐車場｜龍門の滝ガイド";
-const description = "龍門の滝へのJR烏山線滝駅からの徒歩アクセス、車での行き方、無料駐車場、周辺グルメと周辺スポットをまとめました。";
+const title = `交通・駐車場｜${place.name}（${place.englishName}）への行き方｜${place.state}${place.city}`;
+const description = `${place.state}${place.city}・${place.name}へのJR烏山線滝駅からの徒歩アクセス、車での行き方、無料駐車場、所在地（${place.addressEnglish}）、周辺の設備と隣接スポットをまとめました。`;
 ---
 <BaseLayout title={title} description={description} path="/access/" schema={placeJsonLd(Astro.site)}>
   <section class="page-title">
     <div class="page-title-inner">
+      <Breadcrumb
+        tone="light"
+        items={[
+          { label: `${place.name} ホーム`, href: "/" },
+          { label: "交通・駐車場" }
+        ]}
+      />
       <p class="eyebrow">交通</p>
-      <h1>交通・駐車場</h1>
+      <h1>{place.city}・{place.name}への行き方と駐車場</h1>
       <p>滝駅から徒歩約5分。車の場合は無料駐車場を起点に、民芸館と滝を合わせて回れます。</p>
     </div>
   </section>
@@ -21,14 +33,7 @@ const description = "龍門の滝へのJR烏山線滝駅からの徒歩アクセ
     <div class="container split-panel">
       <div>
         <SectionHeading eyebrow="道順" title="詳細交通" text="公共交通・車のどちらでも訪れやすい立地です。帰路の時刻や天候を先に確認しておくと安心です。" />
-        <div class="access-list">
-          {accessSteps.map((item) => (
-            <article class="access-step">
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </article>
-          ))}
-        </div>
+        <TransportGuide variant="full" />
       </div>
       <div class="panel">
         <h3>基本メモ</h3>
@@ -60,7 +65,7 @@ const description = "龍門の滝へのJR烏山線滝駅からの徒歩アクセ
 
   <section class="section">
     <div class="container">
-      <SectionHeading eyebrow="地図" title="Google マップ" text="地図の表示言語は日本語・日本地域に合わせています。" />
+      <SectionHeading eyebrow="地図" title={`${place.name}の位置（Google マップ）`} text="地図の表示言語は日本語・日本地域に合わせています。最新の位置情報とルートは Google マップでご確認ください。" />
       <MapEmbed />
     </div>
   </section>
@@ -82,16 +87,8 @@ const description = "龍門の滝へのJR烏山線滝駅からの徒歩アクセ
 
   <section class="section">
     <div class="container">
-      <SectionHeading eyebrow="食事" title="周辺グルメ" text="滝見学と合わせやすい食事・休憩の候補です。営業時間・定休日は変わることがあります。" />
-      <div class="list-grid">
-        {foodSpots.map((spot) => (
-          <article class="list-card">
-            <span>{spot.type} / {spot.distance}</span>
-            <h3>{spot.name}</h3>
-            <p>{spot.note}</p>
-          </article>
-        ))}
-      </div>
+      <SectionHeading eyebrow="食事・設備" title="滝の近くと周辺でそろうもの" text="非営利の案内として店名は紹介せず、種類と距離帯のみを掲載しています。" />
+      <VisitorServices />
     </div>
   </section>
 
@@ -109,4 +106,11 @@ const description = "龍門の滝へのJR烏山線滝駅からの徒歩アクセ
       </div>
     </div>
   </section>
+
+  <section class="section section-narrow">
+    <SectionHeading eyebrow="評価" title={`${place.name}の評価（Google マップ）`} text={`${place.ratingSource}を引用し、${place.ratingSyncedAt}時点の情報を掲載しています。`} />
+    <RatingSummary />
+  </section>
+
+  <SourcesSection />
 </BaseLayout>

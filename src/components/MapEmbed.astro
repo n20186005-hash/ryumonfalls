@@ -1,15 +1,31 @@
 ---
-import { mapEmbedSrc } from "@/data/place";
+import { googleMapsSearchUrl, googleMapsShareUrl, mapEmbedSrc, place } from "@/data/place";
 ---
+
 <div class="map-frame">
   <iframe
     src={mapEmbedSrc}
-    width="600"
+    width="100%"
     height="450"
     style="border:0;"
     allowfullscreen
     loading="lazy"
     referrerpolicy="strict-origin-when-cross-origin"
-    title="龍門の滝 Google マップ"
+    title={`${place.name}（${place.englishName}）の Google マップ`}
   ></iframe>
+</div>
+<div class="map-actions">
+  <p class="map-address">
+    <span>{place.address}</span>
+    <span>{place.addressEnglish}</span>
+    <span>プラスコード：{place.plusCode}</span>
+  </p>
+  <div class="map-links">
+    <a class="btn btn-light" href={googleMapsShareUrl} target="_blank" rel="noopener noreferrer">
+      Google マップで見る <span aria-hidden="true">↗</span>
+    </a>
+    <a class="btn btn-light" href={googleMapsSearchUrl} target="_blank" rel="noopener noreferrer">
+      Google マップでルート検索 <span aria-hidden="true">↗</span>
+    </a>
+  </div>
 </div>

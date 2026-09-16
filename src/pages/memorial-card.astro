@@ -1,18 +1,26 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
 import { place } from "@/data/place";
 import { placeJsonLd } from "@/lib/seo";
 import memorialScriptUrl from "../scripts/memorial-card.ts?url";
 
-const title = "旅の記念カード｜龍門の滝ガイド";
-const description = "龍門の滝の写真や自分の写真を使い、ブラウザ内Canvasだけで1:1・縦長ポストカード・9:16の記念カードを作成できます。";
+const title = `旅の記念カード｜${place.name}（${place.englishName}）`;
+const description = `${place.state}${place.city}・${place.name}の写真や自分の写真を使い、ブラウザ内Canvasだけで1:1・縦長ポストカード・9:16の記念カードを作成できます。`;
 ---
 <BaseLayout title={title} description={description} path="/memorial-card/" schema={placeJsonLd(Astro.site)}>
   <section class="page-title">
     <div class="page-title-inner">
+      <Breadcrumb
+        tone="light"
+        items={[
+          { label: `${place.name} ホーム`, href: "/" },
+          { label: "旅の記念カード" }
+        ]}
+      />
       <p class="eyebrow">端末内で作成</p>
-      <h1>旅の記念カード</h1>
+      <h1>{place.name}の旅の記念カード</h1>
       <p>写真を選び、サイズと和風スタイルを決めて、旅の一枚をその場で作成。写真・文字・完成画像はすべて端末内で処理されます。</p>
     </div>
   </section>

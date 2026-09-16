@@ -3,7 +3,20 @@ export const place = {
   kana: "りゅうもんのたき",
   englishName: "Ryumon Falls",
   area: "栃木県那須烏山市",
+  city: "那須烏山市",
+  cityEnglish: "Nasukarasuyama",
+  state: "栃木県",
+  stateEnglish: "Tochigi",
+  country: "日本",
+  countryEnglish: "Japan",
+  countryCode: "JP",
+  postalCode: "321-0633",
+  streetAddress: "滝414",
   address: "〒321-0633 栃木県那須烏山市滝414",
+  addressEnglish: "414 Taki, Nasukarasuyama, Tochigi 321-0633, Japan",
+  plusCode: "J4WQ+6W 那須烏山市 栃木県",
+  nearbyLandmark1: "龍門ふるさと民芸館",
+  nearbyLandmark2: "太平寺",
   telephone: "+81-287-83-2765",
   latitude: 36.6455986,
   longitude: 140.1398144,
@@ -15,7 +28,13 @@ export const place = {
   facilityHours: "龍門ふるさと民芸館 9:00〜16:00／龍門カフェ 10:00〜15:00",
   facilityClosed: "毎週火曜日、年末年始。祝日の場合は翌日休館の案内あり。",
   ratingValue: "4.1",
-  reviewCount: "109",
+  reviewCount: "2796",
+  reviewCountLabel: "2,796",
+  ratingSource: "Google マップ（Google Maps）のユーザー評価",
+  ratingSyncedAt: "2026年9月",
+  ratingSyncedYearMonth: "2026-09",
+  ratingSourceNote:
+    "Google マップのユーザー評価を引用しています。最新の評価・口コミは必ず Google マップの掲載ページでご確認ください。",
   description:
     "江川にかかる幅広の滝。大蛇が棲むという伝説、男釜・女釜の甌穴、滝の上を走るJR烏山線の風景が重なり、四季ごとに表情を変える那須烏山の景勝地です。",
   shortDescription:
@@ -27,9 +46,46 @@ export const place = {
 export const mapEmbedSrc =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3201.201675451455!2d140.1398144!3d36.64559860000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6021dd822e761117%3A0xd438758a36a7f932!2sRyumon%20Falls!5e0!3m2!1sja!2sjp!4v1785485469303!5m2!1sja!2sjp";
 
+export const googleMapsShareUrl = "https://maps.app.goo.gl/J2wZZzp5F75kgLmy7";
+export const googleMapsReviewsUrl = googleMapsShareUrl;
+export const googleMapsSearchUrl =
+  "https://www.google.com/maps/search/?api=1&query=" +
+  encodeURIComponent(`${place.englishName} ${place.addressEnglish}`);
+
+export const entityTrail = [
+  place.name,
+  place.city,
+  place.state,
+  place.country
+] as const;
+
+export const officialLinks = [
+  {
+    name: "那須烏山市 公式ホームページ",
+    url: "https://www.city.nasukarasuyama.lg.jp/",
+    note: "所在地・施設案内・観光情報の一次情報。"
+  },
+  {
+    name: "那須烏山市観光協会",
+    url: "https://www.nasukarasuyama.com/",
+    note: "那須烏山エリアの観光情報・イベント情報。"
+  },
+  {
+    name: "栃木県 公式ホームページ",
+    url: "https://www.pref.tochigi.lg.jp/",
+    note: "栃木県の観光・交通・防災などの公式案内。"
+  },
+  {
+    name: "日本政府観光局（JNTO）",
+    url: "https://www.jnto.go.jp/",
+    note: "日本全国の公式観光情報ポータル。"
+  }
+] as const;
+
 export const siteNavigation = [
   { label: "見どころ", href: "/guide/" },
   { label: "交通・駐車場", href: "/access/" },
+  { label: "旅の計画", href: "/planning/" },
   { label: "写真", href: "/gallery/" },
   { label: "記念カード", href: "/memorial-card/" },
   { label: "質問", href: "/faq/" }
@@ -207,5 +263,21 @@ export const faqItems = [
   {
     question: "おすすめの滞在時間は？",
     answer: "滝を眺めるだけなら30〜45分ほど。民芸館、カフェ、太平寺を合わせるなら60〜90分ほど見ておくと余裕があります。"
+  },
+  {
+    question: "龍門の滝の所在地はどこですか？",
+    answer: "〒321-0633 栃木県那須烏山市滝414（英語表記：414 Taki, Nasukarasuyama, Tochigi 321-0633, Japan）です。プラスコードは「J4WQ+6W 那須烏山市 栃木県」です。"
+  },
+  {
+    question: "トイレはありますか？",
+    answer: "滝周辺と隣接する施設側に利用できるトイレがあります。数は多くないため、到着前に済ませておくと安心です。"
+  },
+  {
+    question: "電気自動車の充電やガソリンスタンドは近くにありますか？",
+    answer: "給油設備と充電設備はいずれも幹線道路沿いと市街地方面に点在します（おおよそ車で10〜25分圏）。山間部へ向かう前に残量を確認しておくと安心です。"
+  },
+  {
+    question: "Google マップの評価はいくつですか？",
+    answer: "2026年9月時点の Google マップのユーザー評価は 4.1（2,796件）です。評価と件数は変動するため、最新の口コミは Google マップの掲載ページでご確認ください。"
   }
 ] as const;

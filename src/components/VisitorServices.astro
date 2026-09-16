@@ -1,0 +1,41 @@
+---
+import { visitorServices } from "@/data/visitor";
+import { place } from "@/data/place";
+
+interface Props {
+  compact?: boolean;
+  headingLevel?: "h3" | "h4";
+}
+
+const { compact = false, headingLevel = "h3" } = Astro.props;
+
+const priority = ["トイレ", "駐車場", "休憩・軽食", "飲食", "買い物（スーパー・コンビニ）", "給油・EV 充電"];
+const rows = compact ? visitorServices.filter((row) => priority.includes(row.category)) : visitorServices;
+---
+
+<div class="table-wrap">
+  <table class="data-table">
+    <caption>{place.name}周辺の設備・サービスの目安</caption>
+    <thead>
+      <tr>
+        <th scope="col">設備・サービス</th>
+        <th scope="col">目安</th>
+        <th scope="col">内容</th>
+        <th scope="col">確認ポイント</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          <th scope="row">{row.category}</th>
+          <td>{row.availability}</td>
+          <td>{row.detail}</td>
+          <td>{row.tip}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="service-note">
+  当サイトは非営利の観光案内です。具体的な店舗名・施設名は紹介せず、設備の「種類」と「おおよその距離帯」のみを掲載しています。営業時間・料金・設置状況は変わるため、訪問前に各施設または那須烏山市の案内で最新情報をご確認ください。
+</p>

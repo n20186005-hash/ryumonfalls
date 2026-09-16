@@ -1,17 +1,25 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
-import { faqItems } from "@/data/place";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import { faqItems, place } from "@/data/place";
 import { faqJsonLd, placeJsonLd } from "@/lib/seo";
 
-const title = "よくある質問｜龍門の滝ガイド";
-const description = "龍門の滝の料金、駐車場、電車アクセス、滞在時間、列車撮影、足元の注意点を質問形式でまとめました。";
+const title = `よくある質問｜${place.name}（${place.englishName}）｜${place.state}${place.city}`;
+const description = `${place.state}${place.city}・${place.name}の料金、所在地、駐車場、電車アクセス、滞在時間、列車撮影、Google マップの評価（${place.ratingValue}・${place.reviewCountLabel}件）を質問形式でまとめました。`;
 ---
 <BaseLayout title={title} description={description} path="/faq/" schema={[placeJsonLd(Astro.site), faqJsonLd()]}>
   <section class="page-title">
     <div class="page-title-inner">
+      <Breadcrumb
+        tone="light"
+        items={[
+          { label: `${place.name} ホーム`, href: "/" },
+          { label: "よくある質問" }
+        ]}
+      />
       <p class="eyebrow">質問</p>
-      <h1>よくある質問</h1>
+      <h1>{place.name}のよくある質問</h1>
       <p>はじめて龍門の滝を訪れる前に知っておきたいことを、短く確認できます。</p>
     </div>
   </section>

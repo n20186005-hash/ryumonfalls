@@ -4,20 +4,58 @@ import SectionHeading from "@/components/SectionHeading.astro";
 import InfoPill from "@/components/InfoPill.astro";
 import GalleryGrid from "@/components/GalleryGrid.astro";
 import MapEmbed from "@/components/MapEmbed.astro";
-import { accessSteps, faqItems, foodSpots, highlights, images, nearbyAttractions, place, seasons } from "@/data/place";
+import RatingSummary from "@/components/RatingSummary.astro";
+import SourcesSection from "@/components/SourcesSection.astro";
+import WeatherForecast from "@/components/WeatherForecast.astro";
+import VisitorServices from "@/components/VisitorServices.astro";
+import TransportGuide from "@/components/TransportGuide.astro";
+import CoursePlans from "@/components/CoursePlans.astro";
+import AudienceRoutes from "@/components/AudienceRoutes.astro";
+import HistoryStory from "@/components/HistoryStory.astro";
+import ScienceNotes from "@/components/ScienceNotes.astro";
+import VisitorResponsibility from "@/components/VisitorResponsibility.astro";
+import {
+  entityTrail,
+  faqItems,
+  highlights,
+  images,
+  nearbyAttractions,
+  officialLinks,
+  place,
+  seasons
+} from "@/data/place";
 import { faqJsonLd, placeJsonLd } from "@/lib/seo";
 import galleryScriptUrl from "../scripts/gallery.ts?url";
 
-const title = "龍門の滝｜那須烏山の滝・列車・民話を巡る非公式ガイド";
-const description = "栃木県那須烏山市・龍門の滝の見どころ、交通、駐車場、料金、周辺グルメ、写真スポット、記念カード機能をまとめた日本語ガイド。";
+const title = `龍門の滝（Ryumon Falls）｜${place.state}${place.city}の観光ガイド・アクセス・駐車場`;
+const description = `${place.state}${place.city}・龍門の滝（Ryumon Falls）の見どころ、所在地、交通、駐車場、料金、周辺の${place.nearbyLandmark1}・${place.nearbyLandmark2}、写真、よくある質問をまとめた日本語ガイド。Google マップの評価は${place.ratingValue}（${place.reviewCountLabel}件・${place.ratingSyncedAt}時点）。`;
 ---
-<BaseLayout title={title} description={description} path="/" schema={[placeJsonLd(Astro.site), faqJsonLd()]}>
+
+<BaseLayout
+  title={title}
+  description={description}
+  path="/"
+  image={images[0].src}
+  imageAlt={`${place.name}（${place.englishName}）の全景 - ${place.state}${place.city}・${place.country}の景勝地`}
+  schema={[placeJsonLd(Astro.site), faqJsonLd()]}
+>
   <section class="hero">
-    <img class="hero-bg" src={images[0].src} alt="龍門の滝の大きな水流" loading="eager" decoding="async" />
+    <img
+      class="hero-bg"
+      src={images[0].src}
+      alt={`${place.name}（${place.englishName}）の全景 - ${place.state}${place.city}・${place.country}の景勝地`}
+      loading="eager"
+      decoding="async"
+    />
     <div class="hero-content">
-      <span class="kicker">栃木県那須烏山市</span>
-      <h1>龍門の滝<span>水音、民話、列車が交差する場所</span></h1>
-      <p>{place.shortDescription} 幅広の水流、滝上を走るJR烏山線、滝壺に残る大蛇伝説まで、静かな旅の一日を組み立てられます。</p>
+      <span class="kicker">{place.state}{place.city}・{place.country}</span>
+      <h1>龍門の滝<span>Ryumon Falls｜{place.state}{place.city}の観光名所</span></h1>
+      <p>
+        {place.name}（{place.englishName}）は、{place.state}
+        {place.city}を代表する景勝地です。{place.shortDescription}
+        幅広の水流、滝上を走るJR烏山線、滝壺に残る大蛇伝説まで、静かな旅の一日を組み立てられます。
+      </p>
+      <RatingSummary variant="compact" />
       <div class="hero-actions">
         <a class="btn btn-primary" href="/access/">交通と駐車場を見る</a>
         <a class="btn btn-ghost" href="/memorial-card/">記念カードを作る</a>
@@ -34,20 +72,47 @@ const description = "栃木県那須烏山市・龍門の滝の見どころ、�
   <section class="section">
     <div class="container story-grid">
       <div class="story-card">
-        <SectionHeading eyebrow="物語" title="滝の向こうに、龍の民話が立ち上がる。" text="龍門の滝は江川にかかる名瀑。豪快な水音と、太平寺に伝わる大蛇の伝説が重なり、ただ眺めるだけでは終わらない奥行きを持っています。" />
-        <p>滝の中段には「男釜」「女釜」と呼ばれる甌穴があり、長い年月をかけて水が岩を削った造形美を感じられます。滝の上をJR烏山線の列車が通るため、列車と滝を一緒に撮れる珍しい景観としても親しまれています。</p>
+        <SectionHeading
+          eyebrow={`${place.name}について`}
+          title={`${place.name}（${place.englishName}）とは`}
+          text={`${place.name}は、${place.englishName}としても知られる${place.city}の中心的な観光地です。${place.state}${place.city}${place.country}の水辺に位置し、この地域を訪れる旅の拠点になります。`}
+        />
+        <p class="entity-trail" aria-label="地理的な位置づけ">
+          {entityTrail.map((item, index) => (
+            <span>
+              {item}{index < entityTrail.length - 1 && <span class="entity-trail-sep" aria-hidden="true">→</span>}
+            </span>
+          ))}
+        </p>
+        <p>
+          {place.name}を訪れる際は、周辺の史跡や見どころも合わせて歩けます。特に
+          <strong>{place.nearbyLandmark1}</strong>と<strong>{place.nearbyLandmark2}</strong>は、滝から無理のない範囲で組み合わせやすい場所です。
+        </p>
+        <p>
+          滝の中段には「男釜」「女釜」と呼ばれる甌穴があり、長い年月をかけて水が岩を削った造形美を感じられます。滝の上をJR烏山線の列車が通るため、列車と滝を一緒に撮れる珍しい景観としても親しまれています。
+        </p>
+        <p class="authority-links">
+          <span>公式情報の参照先：</span>
+          {officialLinks.map((link) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer">{link.name}<span aria-hidden="true">↗</span></a>
+          ))}
+        </p>
         <a class="btn btn-dark" href="/guide/">見どころを詳しく</a>
       </div>
       <div class="image-stack" aria-label="龍門の滝の季節写真">
-        <img src={images[2].src} alt={images[2].alt} loading="lazy" />
-        <img src={images[6].src} alt={images[6].alt} loading="lazy" />
+        <img src={images[2].src} alt={`${place.name}の新緑 - ${place.nearbyLandmark1}方面からの眺め`} loading="lazy" />
+        <img src={images[6].src} alt={`${place.name}の上を走るJR烏山線の列車`} loading="lazy" />
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <SectionHeading eyebrow="見どころ" title="はじめての龍門の滝で見るべき4つ" text="短い滞在でも、滝のスケール・地形・民話・鉄道風景の流れで歩くと印象が残ります。" />
+      <SectionHeading
+        eyebrow="見どころ"
+        title={`はじめての${place.name}で見るべき4つ`}
+        text="短い滞在でも、滝のスケール・地形・民話・鉄道風景の流れで歩くと印象が残ります。"
+      />
       <div class="feature-grid">
         {highlights.map((item) => (
           <article class="feature-card">
@@ -97,18 +162,30 @@ const description = "栃木県那須烏山市・龍門の滝の見どころ、�
     </div>
   </section>
 
+  <section class="section" id="weather">
+    <div class="container">
+      <SectionHeading
+        eyebrow="天気"
+        title={`${place.name}の現在の天気と予報`}
+        text={`傘が必要か、服装はどうするか。${place.state}${place.city}の水辺へ向かう前に、その日の観測値と数日先の予報を確認できます。`}
+      />
+      <WeatherForecast variant="compact" heading />
+      <p class="planning-link">
+        7日間の予報・季節別の戦略・詳しい交通手段は<a href="/planning/">旅の計画ページ<span aria-hidden="true">→</span></a>にまとめています。
+      </p>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container split-panel transport-panel">
       <div>
-        <SectionHeading eyebrow="交通" title="詳細交通" text="電車でも車でも訪ねやすい滝です。足元が濡れることがあるため、歩きやすい靴で向かうのがおすすめです。" />
-        <div class="access-list">
-          {accessSteps.map((item) => (
-            <article class="access-step">
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </article>
-          ))}
-        </div>
+        <SectionHeading
+          eyebrow="交通"
+          title={`${place.city}・${place.name}への行き方`}
+          text="電車でも車でも訪ねやすい滝です。足元が濡れることがあるため、歩きやすい靴で向かうのがおすすめです。"
+        />
+        <TransportGuide variant="summary" />
+        <a class="btn btn-light" href="/access/">空港からの行き方も詳しく見る</a>
       </div>
       <MapEmbed />
     </div>
@@ -116,22 +193,43 @@ const description = "栃木県那須烏山市・龍門の滝の見どころ、�
 
   <section class="section">
     <div class="container">
-      <SectionHeading eyebrow="食事" title="周辺グルメ" text="滝見学の前後に寄りやすい候補です。営業日・営業時間は出発前に確認してください。" />
-      <div class="list-grid">
-        {foodSpots.map((spot) => (
-          <article class="list-card">
-            <span>{spot.type} / {spot.distance}</span>
-            <h3>{spot.name}</h3>
-            <p>{spot.note}</p>
-          </article>
-        ))}
-      </div>
+      <SectionHeading
+        eyebrow="設備・サービス"
+        title="トイレ・駐車場・飲食・宿泊・給油の目安"
+        text="非営利の案内として店名は紹介せず、設備の種類と距離帯だけでまとめています。"
+      />
+      <VisitorServices compact />
+      <a class="btn btn-light" href="/planning/">設備の詳細な一覧を見る</a>
     </div>
+  </section>
+
+  <section class="section" id="course">
+    <div class="container">
+      <SectionHeading
+        eyebrow="モデルコース"
+        title="半日・1日の回り方"
+        text="所要時間ごとに、滝と周辺施設を無理なく回れる順序で組みました。"
+      />
+      <CoursePlans />
+    </div>
+  </section>
+
+  <section class="section section-narrow">
+    <SectionHeading
+      eyebrow="目的別"
+      title="同行者に合わせた3つのルート"
+      text="家族連れ、写真と自然観察、体力に不安がある場合。同じ滝でも歩き方は変わります。"
+    />
+    <AudienceRoutes />
   </section>
 
   <section class="section">
     <div class="container">
-      <SectionHeading eyebrow="周辺" title="周辺スポット" text="水音を聞いたあと、民芸館・寺院・町の文化施設へ足を伸ばすと、那須烏山らしい半日旅になります。" />
+      <SectionHeading
+        eyebrow="周辺"
+        title={`${place.name}の周辺の見どころ`}
+        text={`${place.name}を訪ねる際は、${place.nearbyLandmark1}や${place.nearbyLandmark2}など、周辺の史跡・見どころも合わせて歩けます。水音を聞いたあと、民芸館・寺院・町の文化施設へ足を伸ばすと、${place.city}らしい半日旅になります。`}
+      />
       <div class="list-grid">
         {nearbyAttractions.map((spot) => (
           <article class="list-card">
@@ -144,6 +242,15 @@ const description = "栃木県那須烏山市・龍門の滝の見どころ、�
     </div>
   </section>
 
+  <section class="section section-narrow">
+    <SectionHeading
+      eyebrow="評価"
+      title={`${place.name}の評価（Google マップ）`}
+      text={`${place.ratingSource}を引用し、${place.ratingSyncedAt}時点の情報を掲載しています。`}
+    />
+    <RatingSummary />
+  </section>
+
   <section class="section">
     <div class="container">
       <SectionHeading eyebrow="写真" title="写真ギャラリー" text="四季の龍門の滝を大きなグリッドで。クリックすると拡大表示できます。" />
@@ -153,8 +260,48 @@ const description = "栃木県那須烏山市・龍門の滝の見どころ、�
     </div>
   </section>
 
+  <section class="section">
+    <div class="container story-grid">
+      <div class="story-card">
+        <SectionHeading
+          eyebrow="歴史"
+          title={`${place.name}の歴史と意味`}
+          text="名前の由来と、土地に残る語りを知ると、目の前の水流が少し違って見えます。"
+        />
+        <HistoryStory />
+      </div>
+      <div class="image-stack" aria-label="龍門の滝の歴史と風景">
+        <img src={images[1].src} alt={`春の桜と${place.name}`} loading="lazy" />
+        <img src={images[5].src} alt={`冬の${place.name}と氷瀑`} loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="地形と自然"
+        title={`${place.name}を形づくったもの`}
+        text="幅の広い水流、甌穴と呼ばれる円い穴、そして那珂川へ流れる川の営み。目の前の景色がどうできたのかを知ると、散策の解像度が上がります。"
+      />
+      <ScienceNotes />
+    </div>
+  </section>
+
+  <section class="section section-narrow">
+    <SectionHeading
+      eyebrow="訪れる人の責任"
+      title="安全と保全のために守りたいこと"
+      text="滝は地域の暮らしと自然のなかにあります。次の一手が、この場所を次の季節へつなぎます。"
+    />
+    <VisitorResponsibility />
+    <p class="service-note">
+      増水・積雪・落雷時は立入を控えてください。最新の注意報・通行止め情報は<a href="https://www.jma.go.jp/bosai/map.html" target="_blank" rel="noopener noreferrer">気象庁の防災情報<span aria-hidden="true">↗</span></a>と那須烏山市の案内で確認できます。
+    </p>
+  </section>
+
   <section class="cta-band">
-    <img src={images[4].src} alt="冬の龍門の滝" loading="lazy" />
+    <img src={images[4].src} alt={`冬の${place.name}の静かな水面`} loading="lazy" />
     <div class="cta-band-content">
       <p class="eyebrow">記念カード</p>
       <h2>旅の写真を、端末の中だけで記念カードに。</h2>
@@ -175,5 +322,7 @@ const description = "栃木県那須烏山市・龍門の滝の見どころ、�
     </div>
     <a class="btn btn-light" href="/faq/">質問をすべて見る</a>
   </section>
+
+  <SourcesSection />
   <script type="module" src={galleryScriptUrl}></script>
 </BaseLayout>

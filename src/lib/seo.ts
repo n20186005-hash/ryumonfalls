@@ -1,4 +1,4 @@
-import { faqItems, place } from "@/data/place";
+import { faqItems, googleMapsShareUrl, officialLinks, place } from "@/data/place";
 
 export function toAbsolute(path: string, site?: URL | string): string | undefined {
   if (!site) return undefined;
@@ -14,32 +14,55 @@ export function pageUrl(path: string, site?: URL | string): string | undefined {
   return toAbsolute(normalizePath(path), site);
 }
 
+/**
+ * 観光地エンティティの JSON-LD。
+ * 評価（aggregateRating / Review）は掲載元の規約順守のため JSON-LD には含めず、
+ * 画面上で出典・同期時期を明示して表示する。
+ */
 export function placeJsonLd(site?: URL | string) {
   const url = pageUrl("/", site);
+  const id = url ? `${url}#attraction` : undefined;
   const image = toAbsolute("/images/ryumon-falls-hero.webp", site);
+  const galleryImages = [
+    "/images/ryumon-falls-hero.webp",
+    "/images/ryumon-falls-train.webp",
+    "/images/ryumon-falls-autumn.webp"
+  ]
+    .map((path) => toAbsolute(path, site))
+    .filter((value): value is string => Boolean(value));
 
   return {
     "@context": "https://schema.org",
     "@type": ["TouristAttraction", "LocalBusiness"],
+    ...(id ? { "@id": id } : {}),
     name: place.name,
-    alternateName: [place.kana, place.englishName],
-    description: place.description,
+    alternateName: [
+      place.kana,
+      place.englishName,
+      `${place.city}${place.name}`,
+      `${place.englishName} ${place.cityEnglish}`,
+      `${place.name} ${place.state}${place.city}`
+    ],
+    description: `${place.name}（${place.englishName}）は${place.state}${place.city}にある滝。${place.description}`,
     ...(url ? { url } : {}),
-    ...(image ? { image: [image] } : {}),
+    ...(galleryImages.length ? { image: galleryImages } : image ? { image: [image] } : {}),
+    isAccessibleForFree: true,
     telephone: place.telephone,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "滝414",
-      addressLocality: "那須烏山市",
-      addressRegion: "栃木県",
-      postalCode: "321-0633",
-      addressCountry: "JP"
+      streetAddress: place.streetAddress,
+      addressLocality: place.city,
+      addressRegion: place.state,
+      postalCode: place.postalCode,
+      addressCountry: place.countryCode
     },
     geo: {
       "@type": "GeoCoordinates",
       latitude: place.latitude,
       longitude: place.longitude
     },
+    hasMap: googleMapsShareUrl,
+    sameAs: [googleMapsShareUrl, ...officialLinks.map((link) => link.url)],
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -50,13 +73,7 @@ export function placeJsonLd(site?: URL | string) {
       }
     ],
     priceRange: "無料",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: place.ratingValue,
-      reviewCount: place.reviewCount,
-      bestRating: "5",
-      worstRating: "1"
-    }
+    availableLanguage: ["ja", "en"]
   };
 }
 
@@ -71,6 +88,26 @@ export function faqJsonLd() {
         "@type": "Answer",
         text: item.answer
       }
+    }))
+  };
+}
+
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+export function breadcrumbJsonLd(items: BreadcrumbItem[], site?: URL | string) {
+  if (!site) return undefined;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.label,
+      ...(item.href ? { item: pageUrl(item.href, site) } : {})
     }))
   };
 }

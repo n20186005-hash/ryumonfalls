@@ -1,0 +1,49 @@
+---
+import { googleMapsReviewsUrl, place } from "@/data/place";
+
+interface Props {
+  variant?: "compact" | "full";
+}
+
+const { variant = "full" } = Astro.props;
+
+const score = Number(place.ratingValue);
+const ratingPercent = `${Math.max(0, Math.min(5, score)) / 5 * 100}%`;
+const sourceLine = `評価と口コミ件数は Google マップ（Google Maps）のユーザー評価を同期 · ${place.ratingSyncedAt} · Google マップで全ての口コミを見る↗`;
+---
+
+{variant === "compact" ? (
+  <div class="rating-inline">
+    <a class="rating-inline-head" href={googleMapsReviewsUrl} target="_blank" rel="noopener noreferrer">
+      <strong class="rating-inline-score">{place.ratingValue}</strong>
+      <span class="stars" style={`--rating:${ratingPercent}`} aria-hidden="true">★★★★★</span>
+      <span class="rating-inline-count">{place.reviewCountLabel}件の口コミ</span>
+    </a>
+    <p class="rating-inline-note">
+      <span>Google マップのユーザー評価を引用</span>
+      <a href={googleMapsReviewsUrl} target="_blank" rel="noopener noreferrer">{sourceLine}</a>
+    </p>
+  </div>
+) : (
+  <div class="rating-card">
+    <div class="rating-card-head">
+      <div>
+        <p class="eyebrow">評価</p>
+        <p class="rating-card-score">
+          <strong>{place.ratingValue}</strong>
+          <span class="stars" style={`--rating:${ratingPercent}`} aria-hidden="true">★★★★★</span>
+        </p>
+        <p class="rating-card-count">Google マップの口コミ {place.reviewCountLabel}件</p>
+      </div>
+      <a class="btn btn-dark" href={googleMapsReviewsUrl} target="_blank" rel="noopener noreferrer">
+        Google マップで全ての口コミを見る
+      </a>
+    </div>
+    <p class="rating-card-note">
+      {place.ratingSource}を同期しています。同期時期は{place.ratingSyncedAt}です。{place.ratingSourceNote}
+    </p>
+    <p class="rating-card-note">
+      本ページに掲載している評価・口コミの著作権は投稿者と Google マップに帰属します。評価・件数は変動するため、最新の口コミは必ず Google マップでご確認ください。
+    </p>
+  </div>
+)}

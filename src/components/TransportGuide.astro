@@ -1,0 +1,47 @@
+---
+import { transportDetails, transportOverview } from "@/data/visitor";
+
+interface Props {
+  variant?: "summary" | "full";
+}
+
+const { variant = "summary" } = Astro.props;
+---
+
+<div class="transport-guide">
+  <div class="access-list">
+    {transportOverview.map((item) => (
+      <article class="access-step">
+        <h3>{item.title}：{item.lead}</h3>
+        <p>{item.body}</p>
+        <p class="transport-caution">{item.caution}</p>
+      </article>
+    ))}
+  </div>
+
+  {variant === "full" ? (
+    <div class="transport-detail">
+      {transportDetails.map((group) => (
+        <section class="transport-group">
+          <h3>{group.key}</h3>
+          <div class="transport-group-list">
+            {group.items.map((item) => (
+              <article class="transport-item">
+                <h4>{item.name}</h4>
+                <p class="transport-route">{item.route}</p>
+                <dl>
+                  <div><dt>所要</dt><dd>{item.time}</dd></div>
+                  <div><dt>費用</dt><dd>{item.cost}</dd></div>
+                </dl>
+                <p class="transport-tip">{item.tip}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+      <p class="service-note">
+        所要時間・運賃は一般的な目安です。ダイヤ改正・道路規制・天候により変動するため、出発前に各事業者の時刻表・運行情報と道路情報をご確認ください。
+      </p>
+    </div>
+  ) : null}
+</div>

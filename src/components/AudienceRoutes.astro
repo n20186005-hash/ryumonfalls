@@ -1,0 +1,22 @@
+---
+import { audienceRoutes } from "@/data/visitor";
+---
+
+<div class="audience-grid">
+  {audienceRoutes.map((route) => (
+    <article class="audience-card">
+      <h3>{route.title}</h3>
+      <p class="audience-lead">{route.lead}</p>
+      <ol class="audience-steps">
+        {route.steps.map((step) => (
+          <li>{step}</li>
+        ))}
+      </ol>
+      <ul class="audience-tips">
+        {route.tips.map((tip) => (
+          <li>{tip}</li>
+        ))}
+      </ul>
+    </article>
+  ))}
+</div>

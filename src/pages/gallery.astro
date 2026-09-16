@@ -1,19 +1,27 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
 import GalleryGrid from "@/components/GalleryGrid.astro";
-import { images } from "@/data/place";
+import { images, place } from "@/data/place";
 import { placeJsonLd } from "@/lib/seo";
 import galleryScriptUrl from "../scripts/gallery.ts?url";
 
-const title = "写真ギャラリー｜龍門の滝ガイド";
-const description = "龍門の滝の春、初夏、紅葉、冬、氷瀑、JR烏山線と滝の写真を大きなギャラリー形式で紹介します。";
+const title = `写真ギャラリー｜${place.name}（${place.englishName}）の四季`;
+const description = `${place.state}${place.city}・${place.name}の春、初夏、紅葉、冬、氷瀑、JR烏山線と滝の写真を大きなギャラリー形式で紹介します。`;
 ---
 <BaseLayout title={title} description={description} path="/gallery/" image={images[6].src} schema={placeJsonLd(Astro.site)}>
   <section class="page-title">
     <div class="page-title-inner">
+      <Breadcrumb
+        tone="light"
+        items={[
+          { label: `${place.name} ホーム`, href: "/" },
+          { label: "写真ギャラリー" }
+        ]}
+      />
       <p class="eyebrow">写真</p>
-      <h1>写真ギャラリー</h1>
+      <h1>{place.name}の写真ギャラリー</h1>
       <p>四季の光、水の表情、滝上を走る列車。龍門の滝の景観を大きなグリッドでまとめました。</p>
     </div>
   </section>

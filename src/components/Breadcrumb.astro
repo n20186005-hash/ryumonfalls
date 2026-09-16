@@ -1,0 +1,31 @@
+---
+import { breadcrumbJsonLd, type BreadcrumbItem } from "@/lib/seo";
+
+interface Props {
+  items: BreadcrumbItem[];
+  tone?: "light" | "dark";
+}
+
+const { items, tone = "dark" } = Astro.props;
+const schema = breadcrumbJsonLd(items, Astro.site);
+---
+
+<nav class:list={["breadcrumb", `breadcrumb-${tone}`]} aria-label="パンくずリスト">
+  <ol>
+    {
+      items.map((item, index) => (
+        <li>
+          {item.href && index < items.length - 1 ? (
+            <>
+              <a href={item.href}>{item.label}</a>
+              <span class="breadcrumb-sep" aria-hidden="true">/</span>
+            </>
+          ) : (
+            <span aria-current="page">{item.label}</span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+{schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
