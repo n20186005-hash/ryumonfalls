@@ -5,8 +5,8 @@ set "GENIE_TRASH_DIR="
 set "PATH=C:\Users\dcc\.workbuddy\binaries\node\versions\24.14.0.installing.8432.__extract_temp__\node-v24.14.0-win-x64;%PATH%"
 cd /d h:\GitHub\ryumonfalls
 echo === check ===
-call pnpm run check
+call pnpm --config.node-linker=hoisted run check
 echo CHECK_EXIT=%errorlevel%
 echo === build ===
-call pnpm run build
+call pnpm --config.node-linker=hoisted run build
 echo BUILD_EXIT=%errorlevel%
