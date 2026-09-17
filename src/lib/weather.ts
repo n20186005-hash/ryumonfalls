@@ -24,6 +24,7 @@ export interface CurrentWeather {
   humidity: number | null;
   precipitation: number | null;
   windSpeed: number | null;
+  windGust: number | null;
   code: number | null;
 }
 
@@ -37,7 +38,11 @@ export interface DailyWeather {
   precipitation: number | null;
   precipitationProbability: number | null;
   windSpeedMax: number | null;
+  windGustMax: number | null;
   uvIndexMax: number | null;
+  apparentTemperatureMax: number | null;
+  apparentTemperatureMin: number | null;
+  snowfall: number | null;
 }
 
 export interface Forecast {
@@ -69,36 +74,6 @@ export function describeCode(code: number | null | undefined): WeatherLabel {
   return { label: "情報なし", symbol: "–" };
 }
 
-/** 傘・レインウェアの目安。一般人にとって意味のある表現に落とし込む。 */
-export function umbrellaAdvice(day?: DailyWeather): { level: string; text: string } {
-  if (!day) return { level: "情報なし", text: "予報を取得できませんでした。出発前に最新の天気情報をご確認ください。" };
-
-  const pop = day.precipitationProbability ?? 0;
-  const amount = day.precipitation ?? 0;
-
-  if (pop >= 70 || amount >= 10) {
-    return { level: "傘が必須", text: "雨具の上着と滑りにくい靴を用意してください。増水・足元の緩みに注意が必要です。" };
-  }
-  if (pop >= 40 || amount >= 3) {
-    return { level: "折りたたみ傘", text: "にわか雨に備えて、たためる傘があると安心です。降水の有無は直前の予報で再確認してください。" };
-  }
-  if (pop >= 20) {
-    return { level: "念のため携帯", text: "天気は崩れにくい見込みですが、念のため雨具を携帯すると安心です。" };
-  }
-  return { level: "傘は不要な見込み", text: "降水の可能性は低めです。日差しと気温差への対策を優先してください。" };
-}
-
-/** 気温差にもとづく服装の目安。 */
-export function clothingAdvice(max: number | null, min: number | null): string {
-  if (max === null) return "服装の目安を算出できませんでした。重ね着を用意しておくと安心です。";
-  if (max >= 30) return "暑さ対策を最優先に。帽子・飲み物・汗拭きタオルを用意してください。";
-  if (max >= 24) return "半袖で過ごせますが、日差し対策と水分補給を忘れずに。";
-  if (max >= 17) return "薄手の上着があると朝夕も快適です。重ね着が向きます。";
-  if (max >= 10) return "ジャケットやセーターなど、しっかりした上着が必要です。";
-  if (min !== null && min <= 0) return "真冬の装備を。手袋・帽子・滑りにくい冬用の靴が安心です。";
-  return "防寒着を重ね、冷え込みと路面凍結に備えてください。";
-}
-
 function toWeekday(date: string): string {
   const [year, month, day] = date.split("-").map((value) => Number(value));
   if (!year || !month || !day) return "";
@@ -106,7 +81,7 @@ function toWeekday(date: string): string {
   return new Intl.DateTimeFormat("ja-JP", { weekday: "short", timeZone: "UTC" }).format(utc);
 }
 
-interface RawForecast {
+export interface RawForecast {
   current?: Record<string, number | string | null>;
   daily?: Record<string, Array<number | string | null>>;
 }
@@ -119,7 +94,7 @@ function str(value: unknown): string | null {
   return typeof value === "string" ? value : null;
 }
 
-function normalize(raw: RawForecast, updatedAt: string): Forecast {
+export function normalizeForecast(raw: RawForecast, updatedAt: string): Forecast {
   const currentRaw = raw.current ?? {};
   const current: CurrentWeather | null = currentRaw.time
     ? {
@@ -129,6 +104,7 @@ function normalize(raw: RawForecast, updatedAt: string): Forecast {
         humidity: num(currentRaw.relative_humidity_2m),
         precipitation: num(currentRaw.precipitation),
         windSpeed: num(currentRaw.wind_speed_10m),
+        windGust: num(currentRaw.wind_gusts_10m),
         code: num(currentRaw.weather_code)
       }
     : null;
@@ -148,7 +124,11 @@ function normalize(raw: RawForecast, updatedAt: string): Forecast {
       precipitation: num(daily.precipitation_sum?.[index]),
       precipitationProbability: num(daily.precipitation_probability_max?.[index]),
       windSpeedMax: num(daily.wind_speed_10m_max?.[index]),
-      uvIndexMax: num(daily.uv_index_max?.[index])
+      windGustMax: num(daily.wind_gusts_10m_max?.[index]),
+      uvIndexMax: num(daily.uv_index_max?.[index]),
+      apparentTemperatureMax: num(daily.apparent_temperature_max?.[index]),
+      apparentTemperatureMin: num(daily.apparent_temperature_min?.[index]),
+      snowfall: num(daily.snowfall_sum?.[index])
     };
   });
 
@@ -159,9 +139,10 @@ export function buildEndpoint(latitude: number, longitude: number, forecastDays:
   const params = new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
-    current: "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m",
+    current:
+      "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_gusts_10m",
     daily:
-      "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,uv_index_max",
+      "weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,precipitation_probability_max,snowfall_sum,wind_speed_10m_max,wind_gusts_10m_max,uv_index_max",
     timezone: TIMEZONE,
     forecast_days: String(forecastDays)
   });
@@ -192,7 +173,7 @@ export async function getForecast(
     if (!response.ok) throw new Error(`forecast request failed: ${response.status}`);
 
     const raw = (await response.json()) as RawForecast;
-    const value = normalize(raw, new Date().toISOString());
+    const value = normalizeForecast(raw, new Date().toISOString());
     cache = { expiresAt: now + CACHE_TTL_MS, value };
     return value;
   } catch {
